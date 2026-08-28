@@ -3,7 +3,7 @@
 
 **Projeto:** Projeto Integrador 2
 **Instituição:** PUC-Campinas
-**Data:** Agosto de 2026
+
 
 ---
 
