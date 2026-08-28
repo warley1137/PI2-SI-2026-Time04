@@ -1,4 +1,4 @@
-# Documento de Requisitos
+# Readme
 ## Sistema de Atendimento de Pronto Socorro
 
 **Projeto:** Projeto Integrador 2
@@ -9,7 +9,7 @@
 
 ## 1. Introdução
 
-Este documento descreve os requisitos funcionais e não funcionais do **Sistema de Atendimento de Pronto Socorro**, cujo objetivo é controlar os atendimentos realizados em um Pronto Socorro, desde a chegada do paciente na recepção até sua saída após a alta médica. O sistema contempla três etapas do processo de atendimento: **Recepção**, **Triagem** e **Atendimento Médico**.
+**Sistema de Atendimento de Pronto Socorro**, cujo objetivo é controlar os atendimentos realizados em um Pronto Socorro, desde a chegada do paciente na recepção até sua saída após a alta médica. O sistema contempla três etapas do processo de atendimento: **Recepção**, **Triagem** e **Atendimento Médico**.
 
 ---
 
