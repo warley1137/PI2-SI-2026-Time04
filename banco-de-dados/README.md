@@ -1,6 +1,6 @@
 # Banco de Dados
 
-MySQL 8. Modelo baseado no MER visto em aula, com as tabelas de triagem, classificação de Manchester e medicações.
+MySQL 8. Modelo com as tabelas de triagem, classificação de Manchester e medicações.
 
 ![DER](DER_pronto_socorro.png)
 
