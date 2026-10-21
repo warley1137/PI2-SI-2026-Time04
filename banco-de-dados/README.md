@@ -1,8 +1,8 @@
 # Banco de Dados
 
 MySQL 8. Modelo com 6 tabelas: paciente, atendimento, profissional, prontuario, triagem (com classificação de Manchester) e prescricao.
+<img width="1568" height="1576" alt="DER_pronto_socorro" src="https://github.com/user-attachments/assets/f9935ba1-7321-4ceb-bc5e-c0211d14ad3f" />
 
-![DER](DER_pronto_socorro.png)
 
 ## Execução
 
