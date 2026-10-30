@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pronto Socorro · Projeto Integrador 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="#inicio" data-go="inicio"><span class="logo-mark" aria-hidden="true"></span>PS Central</a>
+    <nav class="tabs" aria-label="Navegação principal">
+      <button data-go="inicio">Início</button>
+      <button data-go="recepcao">Recepção</button>
+      <button data-go="triagem">Triagem</button>
+      <button data-go="medico">Médico</button>
+      <button data-go="painel">Painel de espera</button>
+      <button data-go="prontuario">Prontuário</button>
+    </nav>
+    <div class="actions">
+      <span id="quem" class="quem" hidden></span>
+      <button class="btn dark" id="b-entrar" data-go="login">Entrar</button>
+      <button class="btn ghost" id="b-sair" hidden>Sair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section data-tab="inicio">
+  <div class="hero">
+    <div class="wrap hero-in">
+      <div>
+        <h1>Cada minuto na fila, sob controle.</h1>
+        <p class="lead">Recepção, triagem e atendimento médico no mesmo fluxo, com a ordem de espera calculada pela classificação de risco.</p>
+        <div class="row"><button class="btn primary lg" data-go="recepcao">Registrar chegada</button><button class="btn ghost lg" data-go="painel">Abrir painel de espera</button></div>
+      </div>
+      <div class="risk" aria-label="Classificação de risco">
+        <div class="risk-row r-verm"><b>Vermelho</b><span>atendimento imediato</span></div>
+        <div class="risk-row r-lar"><b>Laranja</b><span>até 10 min</span></div>
+        <div class="risk-row r-am"><b>Amarelo</b><span>até 60 min</span></div>
+        <div class="risk-row r-verde"><b>Verde</b><span>até 120 min</span></div>
+        <div class="risk-row r-azul"><b>Azul</b><span>até 240 min</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="metrics" id="metricas">
+      <div class="metric"><span>Aguardando triagem</span><strong data-m="AGUARDANDO_TRIAGEM">0</strong></div>
+      <div class="metric"><span>Aguardando médico</span><strong data-m="AGUARDANDO_MEDICO">0</strong></div>
+      <div class="metric"><span>Em atendimento</span><strong data-m="EM_ATENDIMENTO">0</strong></div>
+      <div class="metric"><span>Finalizados</span><strong data-m="FINALIZADO">0</strong></div>
+    </div>
+
+    <h2 class="sec">Um fluxo, três etapas</h2>
+    <div class="grid3">
+      <article class="card"><h3>Recepção</h3><p>Cadastra o paciente e abre o atendimento com número próprio.</p><button class="link" data-go="recepcao">Ir para recepção</button></article>
+      <article class="card"><h3>Triagem</h3><p>Registra sinais vitais, queixas e define a cor de risco.</p><button class="link" data-go="triagem">Ir para triagem</button></article>
+      <article class="card"><h3>Atendimento médico</h3><p>Chama o próximo da fila, prescreve e finaliza o prontuário.</p><button class="link" data-go="medico">Ir para o médico</button></article>
+    </div>
+
+    <div class="cols">
+      <div>
+        <h2 class="sec">Fila justa, regra clara</h2>
+        <p>O painel ordena por prioridade e, dentro da mesma cor, por quem chegou da triagem primeiro. Quando o tempo máximo da cor é ultrapassado, o paciente aparece destacado.</p>
+      </div>
+      <div>
+        <h2 class="sec">Tudo registrado</h2>
+        <p>Triagem, prescrições e anotações ficam ligadas ao mesmo atendimento, e o prontuário reúne o histórico completo para consulta.</p>
+      </div>
+    </div>
+
+    <h2 class="sec">Dúvidas frequentes</h2>
+    <div class="faq">
+      <details><summary>O que acontece depois da triagem?</summary><p>O atendimento passa para "Aguardando médico" e entra no painel de espera, ordenado pela cor de risco.</p></details>
+      <details><summary>Posso cancelar um atendimento?</summary><p>Sim. Na recepção, informe o motivo e o atendimento sai da fila.</p></details>
+      <details><summary>Um paciente pode ter dois atendimentos abertos?</summary><p>Não. O sistema bloqueia um novo atendimento enquanto o anterior não for finalizado ou cancelado.</p></details>
+    </div>
+
+    <div class="cta">
+      <div><h2>Pronto para receber o próximo paciente?</h2><p>Abra o atendimento e acompanhe cada etapa até a alta.</p></div>
+      <button class="btn primary lg" data-go="recepcao">Novo atendimento</button>
+    </div>
+  </div>
+</section>
+
+<section data-tab="login" hidden>
+  <div class="wrap">
+    <form class="panel login" id="f-login">
+      <h1 class="page">Entrar</h1>
+      <p class="muted">Use o login do seu perfil: recepção, enfermagem ou médico.</p>
+      <label>Login<input name="login" autocomplete="username" required></label>
+      <label>Senha<input name="senha" type="password" autocomplete="current-password" required></label>
+      <button class="btn primary lg">Entrar</button>
+    </form>
+  </div>
+</section>
+
+<section data-tab="recepcao" hidden>
+  <div class="wrap">
+    <h1 class="page">Recepção</h1>
+    <div class="cols">
+      <form class="panel" id="f-paciente">
+        <h3>Cadastrar paciente</h3>
+        <label>Nome completo<input name="nome" required maxlength="100"></label>
+        <div class="two">
+          <label>CPF<input name="cpf" inputmode="numeric" maxlength="14"></label>
+          <label>Nascimento<input name="data_nascimento" type="date" required></label>
+        </div>
+        <div class="two">
+          <label>Sexo<select name="sexo"><option value="">—</option><option>F</option><option>M</option><option>O</option></select></label>
+          <label>Telefone<input name="telefone" maxlength="15"></label>
+        </div>
+        <button class="btn primary">Salvar paciente</button>
+      </form>
+      <form class="panel" id="f-atend">
+        <h3>Abrir atendimento</h3>
+        <label>Paciente<select name="id_paciente" id="sel-paciente" required></select></label>
+        <label>Observação<textarea name="observacao" rows="3" maxlength="500"></textarea></label>
+        <button class="btn dark">Abrir atendimento</button>
+      </form>
+    </div>
+    <div class="panel">
+      <h3>Atendimentos recentes</h3>
+      <div class="scroll"><table id="t-atend"></table></div>
+    </div>
+  </div>
+</section>
+
+<section data-tab="triagem" hidden>
+  <div class="wrap">
+    <h1 class="page">Triagem</h1>
+    <form class="panel" id="f-triagem">
+      <h3>Registrar triagem</h3>
+      <label>Atendimento<select name="id_atendimento" id="sel-triagem" required></select></label>
+      <div class="four">
+        <label>Sistólica (mmHg)<input name="pressao_sistolica" type="number" min="40" max="300" required></label>
+        <label>Diastólica (mmHg)<input name="pressao_diastolica" type="number" min="20" max="200" required></label>
+        <label>Temperatura (°C)<input name="temperatura" type="number" step="0.1" min="30" max="45" required></label>
+        <label>Freq. cardíaca (bpm)<input name="frequencia_cardiaca" type="number" min="20" max="250" required></label>
+      </div>
+      <label>Queixas<textarea name="queixas" rows="3" maxlength="500" required></textarea></label>
+      <fieldset>
+        <legend>Classificação de risco</legend>
+        <div class="chips" id="chips"></div>
+      </fieldset>
+      <button class="btn primary">Enviar para o médico</button>
+    </form>
+  </div>
+</section>
+
+<section data-tab="medico" hidden>
+  <div class="wrap">
+    <h1 class="page">Médico</h1>
+    <div class="cols">
+      <div class="panel">
+        <h3>Fila de atendimento</h3>
+        <div id="fila-medico" class="stack"></div>
+      </div>
+      <div class="panel" id="area-medico">
+        <h3 id="sel-titulo">Selecionar paciente</h3>
+        <p class="muted" id="sel-sub">Escolha alguém na fila.</p>
+        <form id="f-presc" hidden>
+          <label>Medicação<input name="medicamento" required maxlength="100"></label>
+          <div class="two">
+            <label>Dosagem<input name="dosagem" required maxlength="50" placeholder="1 g"></label>
+            <label>Via<select name="via_administracao"><option>VO</option><option>IV</option><option>IM</option><option>SC</option></select></label>
+          </div>
+          <label>Frequência<input name="frequencia" maxlength="50" placeholder="De 6 em 6 horas"></label>
+          <button class="btn primary">Adicionar medicação</button>
+        </form>
+        <ul id="lista-presc" class="plain"></ul>
+        <form id="f-final" hidden>
+          <label>Anotação do prontuário<textarea name="anotacao" rows="3" maxlength="1000"></textarea></label>
+          <button class="btn dark">Finalizar atendimento</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-tab="painel" hidden>
+  <div class="wrap">
+    <h1 class="page">Painel de espera</h1>
+    <div class="panel"><div class="scroll"><table id="t-painel"></table></div></div>
+  </div>
+</section>
+
+<section data-tab="prontuario" hidden>
+  <div class="wrap">
+    <h1 class="page">Prontuário</h1>
+    <div class="panel"><div class="scroll"><table id="t-pront"></table></div></div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap foot-in">
+    <span class="logo"><span class="logo-mark" aria-hidden="true"></span>PS Central</span>
+    <span>Projeto Integrador 2 · PUC-Campinas</span>
+  </div>
+</footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

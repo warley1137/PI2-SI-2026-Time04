@@ -1,152 +1,100 @@
-# Sistema de Atendimento de Pronto Socorro
+# Pronto Socorro · Projeto Integrador 2
 
-**Projeto Integrador 2 — PUC-Campinas**
+Sistema de atendimento de pronto socorro com recepção, triagem e atendimento médico. O visual é feito em HTML, CSS e JavaScript no navegador, e um servidor Node.js pequeno (`server.js`) faz a ponte com o banco MySQL.
 
-## 1. Introdução
+## O que você precisa ter
+- Node.js (versão 18 ou superior). Se não tiver, veja o passo 1.
+- MySQL e MySQL Workbench instalados e rodando.
+- Um editor como o VS Code (opcional, mas ajuda).
 
-O **Sistema de Atendimento de Pronto Socorro** controla os atendimentos de um Pronto Socorro, da chegada do paciente na recepção até a alta médica. O sistema tem três etapas:
+## Passo a passo
 
-1. **Recepção:** cadastro do paciente e abertura do atendimento.
-2. **Triagem:** sinais vitais, queixas e classificação de risco pelo Protocolo de Manchester.
-3. **Atendimento Médico:** consulta, medicações e alta.
+### 1. Instalar o Node.js (se ainda não tiver)
+1. Para saber se já tem, abra o terminal e digite `node -v`. Se aparecer um número de versão, pule para o passo 2.
+2. Baixe em https://nodejs.org a versão **LTS** (botão verde) e instale clicando em "Next" até o fim, deixando as opções padrão.
+3. **Feche o VS Code (ou o terminal) por completo e abra de novo.** Sem isso, o terminal não enxerga o Node recém-instalado.
+4. Confirme com `node -v` e `npm -v`. Os dois devem mostrar uma versão.
 
----
-
-## 2. Requisitos Gerais
-
-| ID | Requisito | Descrição |
-|---|---|---|
-| RG01 | Objetivo | Informatizar e controlar o fluxo de atendimento de um Pronto Socorro, da recepção à alta. |
-| RG02 | Plataforma | Aplicação Web, com Front-End e Back-End separados e banco de dados relacional. |
-| RG03 | Usuários | Três perfis: Recepção, Enfermagem e Médico. |
-| RG04 | Número de atendimento | Cada atendimento tem um número único e automático, que liga as três etapas. |
-| RG05 | Prioridade | A fila do médico segue a classificação do Protocolo de Manchester. |
-| RG06 | Escopo | Projeto acadêmico, sem integração com sistemas externos (prontuário eletrônico, SUS, convênios). |
-
----
-
-## 3. Requisitos Funcionais
-
-### 3.1 Recepção
-
-| ID | Requisito | Descrição |
-|---|---|---|
-| RF01 | Cadastrar paciente | Cadastrar paciente com nome completo, endereço, RG, CPF, nome do pai, nome da mãe e data de nascimento. |
-| RF02 | Gerar número de atendimento | Gerar automaticamente um número único para cada atendimento (ex.: AT0001). |
-| RF03 | Incluir atendimento | Registrar um novo atendimento para um paciente cadastrado. |
-| RF04 | Alterar atendimento | Alterar os dados de um atendimento ainda não confirmado pelo médico. |
-| RF05 | Consultar atendimento | Consultar os atendimentos cadastrados. |
-| RF06 | Cancelar atendimento | Cancelar um atendimento ainda não confirmado pelo médico. |
-
-### 3.2 Triagem (Enfermagem)
-
-| ID | Requisito | Descrição |
-|---|---|---|
-| RF07 | Registrar sinais vitais | Registrar pressão arterial, temperatura corporal e batimentos cardíacos. |
-| RF08 | Registrar queixas | Registrar as queixas do paciente (ex.: dor de cabeça, náusea, dor muscular, suor excessivo). |
-| RF09 | Classificar atendimento | Classificar o atendimento pelo Protocolo de Manchester (seção 5). |
-| RF10 | Vincular triagem ao atendimento | Associar a triagem ao número de atendimento gerado na recepção. |
-
-### 3.3 Atendimento Médico
-
-| ID | Requisito | Descrição |
-|---|---|---|
-| RF11 | Acessar atendimento | Acessar os dados de um atendimento (sinais vitais, queixas e classificação). |
-| RF12 | Registrar medicações | Registrar as medicações prescritas e administradas. |
-| RF13 | Confirmar atendimento | Confirmar a finalização do atendimento (alta). |
-| RF14 | Painel de Atendimento | Tela com a fila de pacientes ordenada pela classificação de Manchester. |
-| RF15 | Dados no painel | Exibir número do atendimento, nome, data de nascimento e classificação de cada paciente. |
-
-### 3.4 Regras do Sistema
-
-| ID | Requisito | Descrição |
-|---|---|---|
-| RF16 | Bloqueio após confirmação | Depois da confirmação do médico, o atendimento não pode ser alterado nem cancelado. |
-| RF17 | Ordem da fila | A fila segue a prioridade de Manchester e, em caso de empate, a ordem de chegada. |
-
----
-
-## 4. Requisitos Não Funcionais
-
-| ID | Requisito | Descrição |
-|---|---|---|
-| RNF01 | Arquitetura Web | Separação entre Front-End e Back-End. |
-| RNF02 | Banco de dados relacional | Armazenamento das informações em banco relacional. |
-| RNF03 | Integração das interfaces | O Back-End conecta as interfaces de Recepção, Triagem e Médico. |
-| RNF04 | Interfaces simples | Interfaces simples e objetivas, adequadas ao ritmo de um pronto atendimento. |
-| RNF05 | Integridade dos dados | Garantir a integridade entre paciente, atendimento, triagem e registro médico. |
-| RNF06 | Consistência do fluxo | Impedir que uma etapa ocorra sem que a anterior tenha sido registrada. |
-| RNF07 | Autenticação e perfis | Acesso por login e senha, e cada perfil acessa só as funções do seu módulo. |
-| RNF08 | Proteção de dados | Dados pessoais e de saúde tratados conforme a LGPD, com senhas criptografadas. |
-| RNF09 | Desempenho | Consultas e operações comuns respondem em até 3 segundos, em condições normais. |
-| RNF10 | Validação de dados | Validar os dados de entrada (CPF, datas e campos obrigatórios). |
-
----
-
-## 5. Regras de Negócio
-
-- Um paciente pode ter vários atendimentos, e cada atendimento pertence a um único paciente.
-- O número de atendimento é gerado pelo sistema e não pode ser editado.
-- A triagem só pode ser registrada para atendimentos abertos e não cancelados.
-- O atendimento médico só ocorre depois da triagem e da classificação.
-- Atendimentos cancelados não entram na fila do médico.
-
-### Classificação de Manchester
-
-| Cor | Prioridade | Tempo máximo de espera |
-|---|---|---|
-| Vermelho | Emergência | Imediato |
-| Laranja | Muito urgente | 10 minutos |
-| Amarelo | Urgente | 60 minutos |
-| Verde | Pouco urgente | 120 minutos |
-| Azul | Não urgente | 240 minutos |
-
----
-
-## 6. Fluxo do Atendimento
-
+**Windows: erro "a execução de scripts foi desabilitada neste sistema"**
+Se o PowerShell bloquear o `npm`, rode uma vez:
 ```
-Recepção                Triagem                    Médico
-Abre atendimento  -->   Sinais vitais e queixas -> Acessa atendimento
-(AT0001)                Classifica (Manchester)    Registra medicações
-                                                   Confirma (alta)
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+Responda `S` se ele perguntar. Outra opção é usar `npm.cmd` no lugar de `npm` (por exemplo, `npm.cmd install`).
 
-Status: Aguardando triagem -> Aguardando atendimento -> Finalizado
-        (Cancelado, somente antes da confirmação médica)
+### 2. Criar o banco de dados (tabelas e dados)
+As tabelas e os dados iniciais estão no repositório do projeto, na pasta `banco-de-dados`:
+https://github.com/warley1137/PI2-SI-2026-Time04
+
+1. Baixe os arquivos da pasta `banco-de-dados` (ou clone o repositório).
+2. No MySQL Workbench, abra e execute **primeiro** o `01_criacao_tabelas.sql`.
+3. Depois abra e execute o `02_dados_iniciais.sql`.
+
+Atenção: se o `01_criacao_tabelas.sql` recriar o banco (`DROP DATABASE`), rodar de novo apaga todos os dados. Se o seu banco já está pronto e com dados, pule este passo.
+
+A pasta também tem o `DER_pronto_socorro.png` com o diagrama do banco.
+
+### 3. Configurar a conexão com o banco
+Abra o arquivo `db.js` e troque as credenciais direto no código:
+
+| Campo      | O que colocar              | Exemplo          |
+|------------|----------------------------|------------------|
+| `host`     | endereço do servidor MySQL | `127.0.0.1`      |
+| `port`     | porta do MySQL             | `3306`           |
+| `user`     | usuário do MySQL           | `root`           |
+| `password` | senha do MySQL             | sua senha        |
+| `database` | nome do schema             | `pronto_socorro` |
+
+### 4. Instalar as dependências
+No terminal, dentro da pasta do projeto:
+```
+npm install
+```
+Isso cria a pasta `node_modules`. Só precisa fazer uma vez.
+
+### 5. Definir as senhas dos logins
+Os profissionais ficam na tabela `profissional`. Se a coluna `senha_hash` estiver como `PENDENTE`, ninguém consegue entrar ainda. Defina as senhas (troque `1234` pela que quiser):
+```
+node definir-senha.js ana.recepcao 1234
+node definir-senha.js bruno.enf 1234
+node definir-senha.js carla.med 1234
+```
+Para definir a mesma senha para todos de uma vez:
+```
+node definir-senha.js --todos 1234
+```
+O `login` é o valor da coluna `login` da tabela `profissional`. Esse script usa as credenciais do `db.js`, então elas só precisam ser trocadas em um lugar.
+
+### 6. Iniciar o sistema
+```
+npm start
+```
+O terminal deve mostrar `Banco conectado.` e `Abra http://localhost:3000`. Deixe esse terminal aberto enquanto usa o site e abra o endereço no navegador. Para parar, use `Ctrl + C`.
+
+## Login por perfil
+- **Recepção** só acessa a aba Recepção (cadastro de paciente e abertura de atendimento).
+- **Enfermagem** só acessa a aba Triagem.
+- **Médico** só acessa a aba Médico (atendimento, prescrição e finalização).
+- **Painel de espera** e **Prontuário** abrem para qualquer perfil logado.
+- A sessão dura 8 horas. O servidor também bloqueia o acesso, então não adianta tentar abrir a aba de outro perfil.
+
+## Estrutura do projeto
+```
+pronto-socorro/
+├── server.js          servidor e rotas
+├── db.js              conexão com o MySQL (troque as credenciais aqui)
+├── auth.js            criptografia das senhas
+├── definir-senha.js   define a senha de um login
+├── package.json
+└── public/            site: index.html, style.css, app.js
 ```
 
----
-
-## 7. Estrutura do Sistema (Componentes)
-
-### 7.1 Front-End
-
-- **Interface da Recepção:** inclusão, alteração, consulta e cancelamento de atendimentos.
-- **Interface da Triagem (Enfermagem):** inclusão dos dados de triagem do atendimento.
-- **Interfaces do Médico:** Painel de Atendimentos + interface para lançamento de medicações e confirmação da consulta.
-
-### 7.2 Back-End
-
-Camada responsável por conectar todas as interfaces (fronts) e gerenciar a obtenção/persistência dos dados no banco.
-
-### 7.3 Banco de Dados
-
-- Deve conter tabelas para: paciente, atendimento, triagem e demais informações necessárias ao funcionamento do processo.
-- Modelagem (relacional) a ser definida pela equipe.
-
----
-
-## 8. Atores do Sistema
-
-| Ator | Responsabilidades |
-|---|---|
-| Recepção | Cadastro, alteração, consulta e cancelamento de atendimentos. |
-| Enfermagem | Registro de sinais vitais, queixas e classificação de Manchester (triagem). |
-| Médico | Consulta ao atendimento, registro de medicações, confirmação do atendimento e uso do Painel de Atendimento. |
-
----
-
-## 9. Fora de Escopo (não mencionado no descritivo)
-
-- Requisitos de segurança/autenticação de usuários não foram detalhados no escopo original — recomenda-se que a equipe defina esse requisito adicionalmente.
-- Requisitos de desempenho, volumetria e disponibilidade não foram especificados — sugere-se definição pela equipe conforme necessidade do projeto acadêmico.
+## Problemas comuns
+- **"NetworkError when attempting to fetch resource":** o servidor não está rodando, ou você abriu o `index.html` direto. Rode `npm start` e acesse `http://localhost:3000`.
+- **"Não foi possível conectar ao banco":** confira as credenciais no `db.js` e se o MySQL está ligado.
+- **`ER_ACCESS_DENIED_ERROR`:** usuário ou senha do banco errados no `db.js`.
+- **`ER_BAD_DB_ERROR`:** o schema informado em `database` não existe. Rode o `01_criacao_tabelas.sql` (passo 2).
+- **"Este login ainda não tem senha":** rode o `definir-senha.js` (passo 5).
+- **`EADDRINUSE`:** a porta 3000 já está em uso. Feche o outro terminal que está rodando o projeto.
+- **`'npm' não é reconhecido`:** o Node não está instalado, ou o terminal não foi reaberto depois da instalação (passo 1).
+- **Mudou o `db.js` ou o `server.js`?** Pare o servidor com `Ctrl + C` e rode `npm start` de novo.
