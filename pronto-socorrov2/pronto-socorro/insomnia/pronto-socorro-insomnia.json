@@ -1,0 +1,815 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-11-05T03:07:18.510Z",
+  "__export_source": "insomnia.desktop.app:v10",
+  "resources": [
+    {
+      "_id": "wrk_pronto_socorro",
+      "_type": "workspace",
+      "name": "Pronto Socorro - API",
+      "description": "Rotas do back-end do PI 2",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_pronto_socorro",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000/api",
+        "senha_recepcao": "troque-pela-senha",
+        "senha_enfermeiro": "troque-pela-senha",
+        "senha_medico": "troque-pela-senha"
+      }
+    },
+    {
+      "_id": "fld_0",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "0 - Teste de conexão",
+      "metaSortKey": 0
+    },
+    {
+      "_id": "req_3",
+      "_type": "request",
+      "parentId": "fld_0",
+      "name": "Saúde (API + banco)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/saude",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 1
+    },
+    {
+      "_id": "fld_1",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "1 - Login",
+      "metaSortKey": 2
+    },
+    {
+      "_id": "req_5",
+      "_type": "request",
+      "parentId": "fld_1",
+      "name": "Login recepcionista",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"ana.recepcao\",\n  \"senha\": \"{{ _.senha_recepcao }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 3
+    },
+    {
+      "_id": "req_6",
+      "_type": "request",
+      "parentId": "fld_1",
+      "name": "Login enfermeiro",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"bruno.enf\",\n  \"senha\": \"{{ _.senha_enfermeiro }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 4
+    },
+    {
+      "_id": "req_7",
+      "_type": "request",
+      "parentId": "fld_1",
+      "name": "Login médico",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"carla.med\",\n  \"senha\": \"{{ _.senha_medico }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 5
+    },
+    {
+      "_id": "req_8",
+      "_type": "request",
+      "parentId": "fld_1",
+      "name": "Quem está logado",
+      "method": "GET",
+      "url": "{{ _.base_url }}/me",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 6
+    },
+    {
+      "_id": "req_9",
+      "_type": "request",
+      "parentId": "fld_1",
+      "name": "Logout",
+      "method": "POST",
+      "url": "{{ _.base_url }}/logout",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 7
+    },
+    {
+      "_id": "fld_2",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "2 - Recepção",
+      "metaSortKey": 8
+    },
+    {
+      "_id": "req_11",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "» Login recepcionista",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"ana.recepcao\",\n  \"senha\": \"{{ _.senha_recepcao }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 9
+    },
+    {
+      "_id": "req_12",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Buscar paciente por nome",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes?busca=Maria",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 10
+    },
+    {
+      "_id": "req_13",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Buscar paciente por CPF",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes?busca=996.030.824-30",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 11
+    },
+    {
+      "_id": "req_14",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Ver paciente",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes/1",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 12
+    },
+    {
+      "_id": "req_15",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Cadastrar paciente",
+      "method": "POST",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Lucas Andrade Teixeira\",\n  \"cpf\": \"529.982.247-25\",\n  \"rg\": \"45.678.912-3\",\n  \"data_nascimento\": \"1995-04-10\",\n  \"sexo\": \"M\",\n  \"nome_mae\": \"Sandra Andrade\",\n  \"nome_pai\": \"Paulo Teixeira\",\n  \"telefone\": \"(19) 99876-5432\",\n  \"cep\": \"13087-571\",\n  \"logradouro\": \"Rua das Flores\",\n  \"numero\": \"100\",\n  \"complemento\": \"\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"Campinas\",\n  \"uf\": \"SP\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 13
+    },
+    {
+      "_id": "req_16",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Alterar paciente",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/pacientes/7",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Lucas Andrade Teixeira\",\n  \"cpf\": \"52998224725\",\n  \"data_nascimento\": \"1995-04-10\",\n  \"sexo\": \"M\",\n  \"telefone\": \"19912345678\",\n  \"cidade\": \"Campinas\",\n  \"uf\": \"SP\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 14
+    },
+    {
+      "_id": "req_17",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Abrir atendimento",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id_paciente\": 7,\n  \"observacao\": \"Dor abdominal desde ontem\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 15
+    },
+    {
+      "_id": "req_18",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Listar atendimentos",
+      "method": "GET",
+      "url": "{{ _.base_url }}/atendimentos",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 16
+    },
+    {
+      "_id": "req_19",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Listar aguardando triagem",
+      "method": "GET",
+      "url": "{{ _.base_url }}/atendimentos?status=AGUARDANDO_TRIAGEM",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 17
+    },
+    {
+      "_id": "req_20",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Buscar pelo número",
+      "method": "GET",
+      "url": "{{ _.base_url }}/atendimentos?numero=AT0002",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 18
+    },
+    {
+      "_id": "req_21",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Atendimentos de hoje",
+      "method": "GET",
+      "url": "{{ _.base_url }}/atendimentos?hoje=1",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 19
+    },
+    {
+      "_id": "req_22",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Ver atendimento completo",
+      "method": "GET",
+      "url": "{{ _.base_url }}/atendimentos/2",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 20
+    },
+    {
+      "_id": "req_23",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Alterar atendimento (observação)",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/atendimentos/8",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"observacao\": \"Dor abdominal forte desde ontem\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 21
+    },
+    {
+      "_id": "req_24",
+      "_type": "request",
+      "parentId": "fld_2",
+      "name": "Cancelar atendimento",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos/5/cancelar",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"motivo\": \"Paciente desistiu\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 22
+    },
+    {
+      "_id": "fld_3",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "3 - Triagem",
+      "metaSortKey": 23
+    },
+    {
+      "_id": "req_26",
+      "_type": "request",
+      "parentId": "fld_3",
+      "name": "» Login enfermeiro",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"bruno.enf\",\n  \"senha\": \"{{ _.senha_enfermeiro }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 24
+    },
+    {
+      "_id": "req_27",
+      "_type": "request",
+      "parentId": "fld_3",
+      "name": "Fila da triagem",
+      "method": "GET",
+      "url": "{{ _.base_url }}/triagem/fila",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 25
+    },
+    {
+      "_id": "req_28",
+      "_type": "request",
+      "parentId": "fld_3",
+      "name": "Registrar triagem",
+      "method": "POST",
+      "url": "{{ _.base_url }}/triagem",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id_atendimento\": 8,\n  \"pressao_sistolica\": 135,\n  \"pressao_diastolica\": 88,\n  \"temperatura\": 38.4,\n  \"frequencia_cardiaca\": 108,\n  \"queixas\": \"Dor abdominal intensa no lado direito\",\n  \"classificacao\": \"Laranja\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 26
+    },
+    {
+      "_id": "req_29",
+      "_type": "request",
+      "parentId": "fld_3",
+      "name": "Ver triagem do atendimento",
+      "method": "GET",
+      "url": "{{ _.base_url }}/triagem/8",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 27
+    },
+    {
+      "_id": "req_30",
+      "_type": "request",
+      "parentId": "fld_3",
+      "name": "Reclassificar",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/triagem/8/classificacao",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"classificacao\": \"Vermelho\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 28
+    },
+    {
+      "_id": "req_31",
+      "_type": "request",
+      "parentId": "fld_3",
+      "name": "Painel",
+      "method": "GET",
+      "url": "{{ _.base_url }}/painel",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 29
+    },
+    {
+      "_id": "fld_4",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "4 - Médico",
+      "metaSortKey": 30
+    },
+    {
+      "_id": "req_33",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "» Login médico",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"carla.med\",\n  \"senha\": \"{{ _.senha_medico }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 31
+    },
+    {
+      "_id": "req_34",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Painel por prioridade",
+      "method": "GET",
+      "url": "{{ _.base_url }}/painel",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 32
+    },
+    {
+      "_id": "req_35",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Chamar paciente",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos/8/chamar",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 33
+    },
+    {
+      "_id": "req_36",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Meus atendimentos em andamento",
+      "method": "GET",
+      "url": "{{ _.base_url }}/meus-atendimentos",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 34
+    },
+    {
+      "_id": "req_37",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Prescrever medicação",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos/8/prescricoes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"medicamento\": \"Dipirona 500 mg/ml\",\n  \"dosagem\": \"2 ml\",\n  \"via_administracao\": \"Intravenosa\",\n  \"frequencia\": \"Dose única\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 35
+    },
+    {
+      "_id": "req_38",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Listar medicações do atendimento",
+      "method": "GET",
+      "url": "{{ _.base_url }}/atendimentos/8/prescricoes",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 36
+    },
+    {
+      "_id": "req_39",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Prescrever outra medicação",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos/8/prescricoes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"medicamento\": \"Ondansetrona\",\n  \"dosagem\": \"8 mg\",\n  \"via_administracao\": \"Intravenosa\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 37
+    },
+    {
+      "_id": "req_40",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Marcar medicação como administrada",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/prescricoes/4/administrar",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 38
+    },
+    {
+      "_id": "req_41",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Remover medicação (não administrada)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/prescricoes/5",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 39
+    },
+    {
+      "_id": "req_42",
+      "_type": "request",
+      "parentId": "fld_4",
+      "name": "Confirmar / finalizar atendimento",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos/8/finalizar",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"diagnostico\": \"Suspeita de apendicite aguda\",\n  \"observacao\": \"Solicitado ultrassom\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 40
+    },
+    {
+      "_id": "fld_5",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "5 - Histórico (qualquer perfil)",
+      "metaSortKey": 41
+    },
+    {
+      "_id": "req_44",
+      "_type": "request",
+      "parentId": "fld_5",
+      "name": "Histórico do paciente",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes/1/historico",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 42
+    },
+    {
+      "_id": "fld_6",
+      "_type": "request_group",
+      "parentId": "wrk_pronto_socorro",
+      "name": "6 - Testes de erro",
+      "metaSortKey": 43
+    },
+    {
+      "_id": "req_46",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Logout",
+      "method": "POST",
+      "url": "{{ _.base_url }}/logout",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 44
+    },
+    {
+      "_id": "req_47",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Sem login (401)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes?busca=Jo",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 45
+    },
+    {
+      "_id": "req_48",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "» Login enfermeiro",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"bruno.enf\",\n  \"senha\": \"{{ _.senha_enfermeiro }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 46
+    },
+    {
+      "_id": "req_49",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Enfermeiro cadastrando paciente (403)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Teste\",\n  \"data_nascimento\": \"2000-01-01\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 47
+    },
+    {
+      "_id": "req_50",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Pressão invertida (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/triagem",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id_atendimento\": 5,\n  \"pressao_sistolica\": 80,\n  \"pressao_diastolica\": 120,\n  \"temperatura\": 37,\n  \"frequencia_cardiaca\": 90,\n  \"queixas\": \"teste\",\n  \"classificacao\": \"Verde\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 48
+    },
+    {
+      "_id": "req_51",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Cor que não existe (400)",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/triagem/2/classificacao",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"classificacao\": \"Roxo\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 49
+    },
+    {
+      "_id": "req_52",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "» Login recepcionista",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"ana.recepcao\",\n  \"senha\": \"{{ _.senha_recepcao }}\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 50
+    },
+    {
+      "_id": "req_53",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "CPF inválido (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Teste\",\n  \"cpf\": \"111.111.111-11\",\n  \"data_nascimento\": \"2000-01-01\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 51
+    },
+    {
+      "_id": "req_54",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "CPF repetido (409)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Outro\",\n  \"cpf\": \"52998224725\",\n  \"data_nascimento\": \"2000-01-01\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 52
+    },
+    {
+      "_id": "req_55",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Abrir 2º atendimento do mesmo paciente (409)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id_paciente\": 2\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 53
+    },
+    {
+      "_id": "req_56",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Cancelar finalizado (409)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/atendimentos/1/cancelar",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"motivo\": \"teste\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaSortKey": 54
+    },
+    {
+      "_id": "req_57",
+      "_type": "request",
+      "parentId": "fld_6",
+      "name": "Rota inexistente (404)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/nao-existe",
+      "body": {},
+      "headers": [],
+      "metaSortKey": 55
+    }
+  ]
+}

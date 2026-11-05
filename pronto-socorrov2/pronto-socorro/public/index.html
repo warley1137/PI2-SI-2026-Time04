@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pronto Socorro</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <section id="tela-login" class="login-fundo">
+    <form id="form-login" class="login-card">
+      <div class="marca"><span class="cruz">+</span> Pronto Socorro</div>
+      <p class="sub">Sistema de Atendimento</p>
+      <label>Login<input name="login" autocomplete="username" required></label>
+      <label>Senha<input name="senha" type="password" autocomplete="current-password" required></label>
+      <button type="submit" class="btn primario largo">Entrar</button>
+      <p id="login-erro" class="erro-texto"></p>
+    </form>
+  </section>
+
+  <div id="app" hidden>
+    <header class="topo">
+      <div class="marca"><span class="cruz">+</span> Pronto Socorro</div>
+      <nav id="menu"></nav>
+      <div class="usuario">
+        <span id="usuario-nome"></span>
+        <span id="usuario-funcao" class="tag"></span>
+        <button id="btn-sair" class="btn fantasma">Sair</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="view-recepcao" class="view" hidden>
+        <div class="cabecalho">
+          <h1>Recepção</h1>
+          <button id="btn-novo-paciente" class="btn primario">+ Novo paciente</button>
+        </div>
+        <form id="form-busca-paciente" class="barra-busca">
+          <input name="busca" placeholder="Buscar paciente por nome ou CPF" required>
+          <button class="btn">Buscar</button>
+        </form>
+        <div id="resultado-pacientes"></div>
+      </section>
+
+      <section id="view-atendimentos" class="view" hidden>
+        <div class="cabecalho"><h1>Atendimentos</h1></div>
+        <form id="form-filtro-atendimentos" class="barra-busca">
+          <select name="status">
+            <option value="">Todos os status</option>
+            <option value="AGUARDANDO_TRIAGEM">Aguardando triagem</option>
+            <option value="AGUARDANDO_MEDICO">Aguardando médico</option>
+            <option value="EM_ATENDIMENTO">Em atendimento</option>
+            <option value="FINALIZADO">Finalizado</option>
+            <option value="CANCELADO">Cancelado</option>
+          </select>
+          <input name="numero" placeholder="Nº (ex.: AT0002)">
+          <label class="check"><input type="checkbox" name="hoje"> Só hoje</label>
+          <button class="btn">Filtrar</button>
+        </form>
+        <div id="lista-atendimentos"></div>
+      </section>
+
+      <section id="view-triagem" class="view" hidden>
+        <div class="cabecalho"><h1>Triagem</h1><button id="btn-atualizar-fila" class="btn fantasma">Atualizar</button></div>
+        <div class="duas-colunas">
+          <div>
+            <h2>Fila de espera</h2>
+            <div id="fila-triagem"></div>
+          </div>
+          <div>
+            <h2>Classificação de risco</h2>
+            <div id="area-triagem" class="vazio">Selecione um paciente da fila.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="view-painel" class="view" hidden>
+        <div class="cabecalho">
+          <h1>Painel de atendimento</h1>
+          <span id="painel-atualizado" class="discreto"></span>
+        </div>
+        <div class="legenda" id="legenda-manchester"></div>
+        <div id="tabela-painel"></div>
+      </section>
+
+      <section id="view-consulta" class="view" hidden>
+        <div class="cabecalho"><h1>Atendimento médico</h1></div>
+        <div id="area-consulta"></div>
+      </section>
+
+      <section id="view-historico" class="view" hidden>
+        <div class="cabecalho"><h1>Histórico do paciente</h1></div>
+        <form id="form-busca-historico" class="barra-busca">
+          <input name="busca" placeholder="Nome ou CPF do paciente" required>
+          <button class="btn">Buscar</button>
+        </form>
+        <div id="area-historico"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal-fundo" hidden>
+    <div class="modal">
+      <h2 id="modal-titulo"></h2>
+      <div id="modal-corpo"></div>
+      <p id="modal-erro" class="erro-texto"></p>
+      <div id="modal-botoes" class="modal-botoes"></div>
+    </div>
+  </div>
+  <div id="aviso" class="aviso" hidden></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/recepcao.js"></script>
+  <script src="js/triagem.js"></script>
+  <script src="js/medico.js"></script>
+  <script src="js/historico.js"></script>
+</body>
+</html>
