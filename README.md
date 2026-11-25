@@ -1,5 +1,53 @@
 # Sistema de Atendimento de Pronto Socorro — PI 2
 
+Projeto Integrador 2 do curso de Sistemas de Informação (PUC-Campinas), Time 4.
+
+## Sobre o projeto
+
+O sistema informatiza o fluxo de atendimento de um Pronto Socorro, da chegada do paciente na recepção até a alta médica. São três etapas, ligadas pelo número do atendimento (ex.: `AT0001`):
+
+1. **Recepção:** cadastro do paciente e abertura do atendimento.
+2. **Triagem (Enfermagem):** sinais vitais, queixas e classificação de risco pelo Protocolo de Manchester.
+3. **Atendimento médico:** painel por prioridade, medicações e confirmação da alta.
+
+O projeto é acadêmico e não se integra a sistemas externos. Existem três perfis de usuário (Recepção, Enfermagem e Médico), e cada um acessa apenas as funções do seu módulo.
+
+### Status do atendimento
+
+| Etapa | Ação | Status |
+|---|---|---|
+| Recepção | Abre o atendimento (ex.: AT0001) | Aguardando triagem |
+| Triagem | Registra sinais vitais, queixas e a cor de Manchester | Aguardando médico |
+| Médico | Chama o paciente | Em atendimento |
+| Médico | Registra as medicações e confirma a alta | Finalizado |
+
+Um atendimento pode ser **Cancelado** (com data e motivo) apenas antes da confirmação do médico. `Finalizado` e `Cancelado` são status finais: o atendimento não volta a nenhum status anterior.
+
+### Protocolo de Manchester
+
+| Cor | Prioridade | Tempo máximo de espera |
+|---|---|---|
+| Vermelho | Emergência | Imediato |
+| Laranja | Muito urgente | 10 minutos |
+| Amarelo | Urgente | 60 minutos |
+| Verde | Pouco urgente | 120 minutos |
+| Azul | Não urgente | 240 minutos |
+
+O painel do médico mostra quem está em atendimento e os que aguardam, ordenados pela prioridade e, em caso de empate, pela ordem da triagem. Atendimentos cancelados e finalizados não aparecem.
+
+### Decisões de modelagem
+
+- **8 tabelas** (`paciente`, `profissional`, `medico`, `enfermeiro`, `atendimento`, `triagem`, `prontuario`, `prescricao`) e **2 views** (`vw_painel_atendimento` e `vw_historico_paciente`). O diagrama está em `banco-de-dados/DER_pronto_socorro.png`.
+- `medico` e `enfermeiro` especializam `profissional` (CRM e COREN). As chaves estrangeiras garantem no banco que só um médico abre prontuário e só um enfermeiro registra triagem.
+- Um paciente tem vários atendimentos; um atendimento tem no máximo uma triagem e no máximo um prontuário, que reúne o diagnóstico, a alta e as várias prescrições.
+- Unicidade: CPF do paciente, número do atendimento, login do profissional, uma triagem por atendimento e um prontuário por atendimento.
+- O status do atendimento e a cor de Manchester são limitados por `CHECK`.
+- Integridade referencial por chaves primárias e estrangeiras, sem registros órfãos. Senhas guardadas com hash.
+
+---
+
+## Arquitetura
+
 Sistema web com três partes que conversam entre si:
 
 ```
@@ -12,7 +60,7 @@ Sistema web com três partes que conversam entre si:
 
 - **Front-end** (`public/`): o que o usuário vê. Não acessa o banco; só chama a API com `fetch`.
 - **Back-end** (`src/`): recebe os pedidos do front (ex.: `POST /api/triagem`), confere login e permissão, valida os dados, executa o SQL no MySQL e devolve a resposta em JSON.
-- **Banco** (`banco-de-dados/`): guarda os dados. São os mesmos scripts que já estão no GitHub.
+- **Banco** (`banco-de-dados/`): guarda os dados. Os scripts SQL e o DER ficam versionados neste repositório.
 
 O mesmo servidor entrega as telas e a API, então só existe um endereço: **http://localhost:3000**.
 
@@ -23,9 +71,9 @@ O mesmo servidor entrega as telas e a API, então só existe um endereço: **htt
 | Programa | Para quê | Onde baixar |
 |---|---|---|
 | **Node.js** (versão LTS) | Roda o back-end | https://nodejs.org (botão “LTS”) |
-| **MySQL 8 + Workbench** | O banco (você já tem) | https://dev.mysql.com/downloads/installer |
+| **MySQL 8 + Workbench** | O banco | https://dev.mysql.com/downloads/installer |
 | **VS Code** | Abrir e editar o projeto | https://code.visualstudio.com |
-| **Insomnia** | Testar a API sem a tela | https://insomnia.rest/download |
+| **Insomnia** (opcional) | Testar a API sem a tela | https://insomnia.rest/download |
 
 Depois de instalar o Node, feche e abra o VS Code e confira no terminal:
 
@@ -44,6 +92,8 @@ Se aparecerem números de versão, está tudo certo.
 No **MySQL Workbench**, abra e execute (raio ⚡) nesta ordem:
 1. `banco-de-dados/01_criacao_tabelas.sql`
 2. `banco-de-dados/02_dados_iniciais.sql`
+
+> O `01_criacao_tabelas.sql` começa com `DROP DATABASE IF EXISTS pronto_socorro`, então **apaga e recria o banco**. Se já existir um banco `pronto_socorro` com dados que você quer manter, não rode o `01`.
 
 ### 2.2 Abrir no VS Code
 `File > Open Folder…` e escolha a pasta `pronto-socorro`.
@@ -82,7 +132,7 @@ O script mostra cada profissional do banco e pede uma senha para ele (duas vezes
 - A senha é gravada **criptografada (hash)** na coluna `senha_hash`; ninguém consegue ler a senha real no banco.
 - Quem já tem senha: aperte **Enter** para manter a atual.
 - Para trocar a senha de uma pessoa só: `npm run senhas -- carla.med NovaSenha@1`.
-- Se rodar o script 02 de novo, as senhas voltam para `PENDENTE` e é preciso rodar `npm run senhas` outra vez.
+- Se recriar o banco (rodando o `01` e o `02` de novo), as senhas voltam para `PENDENTE` e é preciso rodar `npm run senhas` outra vez.
 
 ### 2.6 Ligar o servidor
 
@@ -145,7 +195,7 @@ O Insomnia faz o papel do front: manda pedidos para o back-end e mostra a respos
 
 ```
 pronto-socorro/
-├── banco-de-dados/          scripts SQL e DER (a sua parte)
+├── banco-de-dados/          scripts SQL (criação e dados iniciais) e DER
 ├── src/                     BACK-END
 │   ├── server.js            liga o servidor e junta as rotas
 │   ├── db.js                conexão com o MySQL (lê o .env) + função de transação
@@ -265,3 +315,19 @@ O `?` no SQL é preenchido pelo mysql2 com os valores enviados. Isso evita SQL I
 - **dotenv**: lê o arquivo `.env`.
 - **crypto** (nativo do Node): hash de senha e assinatura do cookie.
 - **HTML, CSS e JavaScript puro** no front: `fetch` para chamar a API, sem frameworks.
+
+---
+
+## 10. Equipe
+
+| Integrante |
+|---|
+| João Pedro Bueno Minutti |
+| Maria Luiza Daon |
+| Natã de Almeida Santos |
+| Warley Mendes de Sousa |
+
+- **Repositório:** https://github.com/warley1137/PI2-SI-2026-Time04
+- **Quadro no Trello:** https://trello.com/b/kIrAiq3h/pi2-si-2026-time04
+- **Metodologia:** Scrum, com 4 sprints de 2 semanas (Planning, Daily, Review e Retrospectiva).
+- **Entrega final:** marcada com a TAG `v1.0` no GitHub.
